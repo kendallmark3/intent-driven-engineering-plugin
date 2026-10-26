@@ -1,0 +1,18 @@
+{
+  "name": "intent-driven-engineering-marketplace",
+  "owner": {
+    "name": "Mark Kendall / Repogenic"
+  },
+  "metadata": {
+    "description": "Intent-Driven Engineering plugins for Claude Code.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "intent-driven-engineering",
+      "source": "./plugins/intent-driven-engineering",
+      "description": "Three reusable Intent-Driven Engineering skills: refine intent, review enterprise radius, and turn completed work into evidence-based case studies.",
+      "version": "1.0.0"
+    }
+  ]
+}
