@@ -1,7 +1,7 @@
 ---
 name: enterprise-radius-review
-description: Reviews an AI system, architecture, repository, gateway, agentic workflow, platform capability, shared service, team boundary, or production proposal using a five-radius enterprise model. Use when the user asks where something belongs, who should own it, whether it is production-ready, how far a team's responsibility extends, what enterprise controls are missing, or requests a Radius Analysis.
-version: 1.0.0
+description: Advisory, evidence-labelled review of an AI system, architecture, repository, gateway, agentic workflow, platform capability, shared service, or production proposal using a five-radius enterprise model. Use when the user requests a Radius Review/Analysis, asks whether a system is production-ready, where a capability or platform belongs, how far a team's responsibility extends, or what enterprise controls are missing. For a narrow ownership or placement question, answer briefly and offer the full review.
+version: 1.2.0
 ---
 
 # Enterprise Radius Review
@@ -187,7 +187,12 @@ Do not perform the full review for:
    - **Reported** — asserted by a person or ticket, no artifact.
    - **Unknown** — no evidence found.
    Cite the source (file path, link, command) for each.
-3. Determine the current credible radius using the **ceiling rule**: a radius is reached only if it and every lower radius have no material gap at **Unknown**, and its core claims are at least **Documented**. The overall radius cannot exceed the lowest radius with a material gap. If the score rests mainly on Documented evidence, say so in the Executive Finding.
+3. Determine the current credible radius using the **ceiling rule**:
+   - A radius is **reached** only if its core claims are at least **Documented** and it has no material gap at **Unknown**.
+   - The current credible radius is the highest radius N such that radii 1 through N are all reached. The first radius that is not reached sets the ceiling; name it.
+   - A radius with partial evidence but an Unknown material gap is not reached. Report this as "Radius N, approaching N+1" — never round up.
+   - If no radius is reached, the current credible radius is 0 (intent not yet established).
+   - If the score rests mainly on Documented evidence, say so in the Executive Finding.
 4. Identify claimed radii that lack evidence.
 5. Separate application responsibilities from shared platform responsibilities.
 6. Identify authority and autonomy boundaries.
@@ -283,6 +288,7 @@ For small systems or single components, use only: Advisory line, Scope & Method,
 Before finalizing, ask:
 - Did the review state its scope and what it actually ran versus only read?
 - Did the review identify the current credible radius, and does it respect the ceiling rule?
+- Would a second run on the same evidence give the same radius and the same ceiling? If the score depends on a judgment call (for example, whether a gap is material), name that call explicitly.
 - Does it include the advisory statement?
 - Did it distinguish missing capability from intentionally out-of-scope capability?
 - Did it separate application, platform, and enterprise control responsibilities?
@@ -305,3 +311,5 @@ Keep at least three reference cases with expected outcomes, and re-run them befo
 3. **Well-documented system with thin evidence** — expected: score capped by the ceiling rule, finding states the score rests on Documented evidence.
 
 Add each real correction as a new case.
+
+Case files, the pre-registration template, and the run log live in `calibration/` next to this file. Write a case's expected outcome **before** running the review on it, and do not edit it afterward to fit the result.
