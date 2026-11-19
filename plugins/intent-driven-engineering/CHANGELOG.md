@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0
+
+- `enterprise-radius-review`: added `scripts/check_review.py` (standard library only) — checks the advisory line, Scope & Method (unit / ran / read) and Radius Summary, recomputes the radius and ceiling with the ceiling rule, and flags any mismatch with the stated score. With `--expected` and `--log` it scores a calibration run against the pre-registered case and appends to `calibration/run-log.md`. It does not judge evidence labels.
+- Output format: `Current Credible Radius` now has parsable `Radius:` / `Ceiling:` lines, and a required `Radius Summary` table (both forms).
+- Validation step: run the checker when Python is available; check by hand otherwise.
+- 13 unit tests, including the inflated-score pattern seen on abbott-forge.
+
 ## 1.2.0
 
 - `enterprise-radius-review`: rewrote the ceiling rule so it has one reading (highest radius N with radii 1..N all reached; report "N, approaching N+1"; never round up).

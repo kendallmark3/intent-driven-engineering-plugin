@@ -1,7 +1,7 @@
 ---
 name: enterprise-radius-review
 description: Advisory, evidence-labelled review of an AI system, architecture, repository, gateway, agentic workflow, platform capability, shared service, or production proposal using a five-radius enterprise model. Use when the user requests a Radius Review/Analysis, asks whether a system is production-ready, where a capability or platform belongs, how far a team's responsibility extends, or what enterprise controls are missing. For a narrow ownership or placement question, answer briefly and offer the full review.
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Enterprise Radius Review
@@ -217,7 +217,18 @@ Do not perform the full review for:
 <Current radius, biggest strength, biggest gap, and recommended next move. Label the overall radius as a judgment.>
 
 ## Current Credible Radius
-<1-5, which radius set the ceiling, and the dominant evidence level behind the score>
+Radius: <0-5> (approaching <N+1>, if applicable)
+Ceiling: <Radius M | scope | none>
+<Why that radius set the ceiling, and the dominant evidence level behind the score.>
+
+## Radius Summary
+| Radius | Status | Core evidence | Unknown material gap |
+|---|---|---|---|
+| 1 | <Reached / Not reached / N/A> | <Verified / Documented / Reported / Unknown> | <Yes / No> |
+| 2 | ... | ... | ... |
+| 3 | ... | ... | ... |
+| 4 | ... | ... | ... |
+| 5 | ... | ... | ... |
 
 ## Radius 1 — Intent & Discovery
 ### Present
@@ -267,7 +278,9 @@ For radii beyond the intended scope, state **Not required for current intent** r
 
 ### Short Form
 
-For small systems or single components, use only: Advisory line, Scope & Method, Executive Finding, a five-row table (Radius | Present | Evidence level + source | Gap), Authority & Autonomy, Proof Required Before Expansion. Mark out-of-scope radii **N/A**.
+For small systems or single components, use only: Advisory line, Scope & Method, Executive Finding, a five-row table (Radius | Present | Evidence level + source | Gap), Authority & Autonomy, Proof Required Before Expansion. Mark out-of-scope radii **N/A**. Always include Current Credible Radius and Radius Summary, in both forms.
+
+In the Radius Summary: **Reached** needs core evidence Verified or Documented and no Unknown material gap; otherwise **Not reached**. Use **N/A** (with "—" in the other cells) only for radii beyond the intended scope. `Ceiling` is the first radius that is not Reached, `scope` if that radius is N/A, or `none` if all five are Reached.
 
 ## Quality Rules
 
@@ -288,6 +301,7 @@ For small systems or single components, use only: Advisory line, Scope & Method,
 Before finalizing, ask:
 - Did the review state its scope and what it actually ran versus only read?
 - Did the review identify the current credible radius, and does it respect the ceiling rule?
+- If you can run Python 3, save the review to a file and run `python3 scripts/check_review.py <review-file>` from this skill's directory. Fix every FAIL before finalizing. The script checks the structure and recomputes the radius from the Radius Summary; it does not judge whether the evidence labels are right — that stays with you and the human reviewer. If Python is unavailable, apply the same checks by hand.
 - Would a second run on the same evidence give the same radius and the same ceiling? If the score depends on a judgment call (for example, whether a gap is material), name that call explicitly.
 - Does it include the advisory statement?
 - Did it distinguish missing capability from intentionally out-of-scope capability?
