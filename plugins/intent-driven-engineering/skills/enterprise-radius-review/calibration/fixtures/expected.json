@@ -1,0 +1,159 @@
+{
+  "01-small-prototype.md": {
+    "exit": 0,
+    "radius": 1,
+    "ceiling": "Radius 2",
+    "must_report": [],
+    "must_warn": [],
+    "case": "small standalone prototype"
+  },
+  "02-production-service.md": {
+    "exit": 0,
+    "radius": 4,
+    "ceiling": "Radius 5",
+    "must_report": [],
+    "must_warn": [],
+    "case": "production service with verified operational evidence"
+  },
+  "03-documented-thin-evidence.md": {
+    "exit": 0,
+    "radius": 2,
+    "ceiling": "Radius 3",
+    "must_report": [],
+    "must_warn": [],
+    "case": "well-documented system, little demonstrated evidence"
+  },
+  "04-missing-r1-intent.md": {
+    "exit": 1,
+    "radius": 0,
+    "ceiling": "Radius 1",
+    "must_report": [
+      "Stated radius 3",
+      "Stated ceiling"
+    ],
+    "must_warn": [],
+    "case": "adversarial: working prototype, no stated intent, claims Radius 3"
+  },
+  "05-r3-without-r2-proof.md": {
+    "exit": 1,
+    "radius": 1,
+    "ceiling": "Radius 2",
+    "must_report": [
+      "Stated radius 3",
+      "Stated ceiling"
+    ],
+    "must_warn": [],
+    "case": "adversarial: Radius 3 integration, Radius 2 proof only reported"
+  },
+  "06-unsupported-r5-governance.md": {
+    "exit": 1,
+    "radius": 4,
+    "ceiling": "Radius 5",
+    "must_report": [
+      "Radius 5 is marked Reached",
+      "Stated radius 5"
+    ],
+    "must_warn": [],
+    "case": "adversarial: Radius 5 governance asserted without artifacts"
+  },
+  "07-invalid-evidence-label.md": {
+    "exit": 1,
+    "radius": null,
+    "ceiling": null,
+    "must_report": [
+      "Radius 2: Core evidence must be one of",
+      "Radius 3: Core evidence must be one of"
+    ],
+    "must_warn": [],
+    "case": "invalid evidence classification"
+  },
+  "08-duplicate-rows.md": {
+    "exit": 1,
+    "radius": null,
+    "ceiling": null,
+    "must_report": [
+      "more than one row for Radius 2"
+    ],
+    "must_warn": [],
+    "case": "duplicate Radius Summary rows"
+  },
+  "09-wrong-ceiling.md": {
+    "exit": 1,
+    "radius": 2,
+    "ceiling": "Radius 3",
+    "must_report": [
+      "Stated ceiling 'Radius 4'"
+    ],
+    "must_warn": [],
+    "case": "incorrect ceiling calculation"
+  },
+  "10-legitimate-scope-exclusion.md": {
+    "exit": 0,
+    "radius": 2,
+    "ceiling": "scope",
+    "must_report": [],
+    "must_warn": [],
+    "case": "legitimate scope exclusion"
+  },
+  "11-na-conceals-gap.md": {
+    "exit": 1,
+    "radius": null,
+    "ceiling": null,
+    "must_report": [
+      "Radius 2 is N/A but"
+    ],
+    "must_warn": [],
+    "case": "adversarial: N/A used to hide an Unknown gap"
+  },
+  "12-r1-not-applicable.md": {
+    "exit": 1,
+    "radius": null,
+    "ceiling": null,
+    "must_report": [
+      "Radius 1 cannot be N/A"
+    ],
+    "must_warn": [],
+    "case": "adversarial: Radius 1 marked N/A"
+  },
+  "13-applicable-after-na.md": {
+    "exit": 1,
+    "radius": null,
+    "ceiling": null,
+    "must_report": [
+      "Radius 3 is rated but Radius 2 is N/A"
+    ],
+    "must_warn": [],
+    "case": "adversarial: in-scope radius above an N/A radius"
+  },
+  "14-verified-nothing-ran.md": {
+    "exit": 0,
+    "radius": 2,
+    "ceiling": "scope",
+    "must_report": [],
+    "must_warn": [
+      "Verified",
+      "nothing was executed"
+    ],
+    "case": "adversarial: Verified labels while nothing was executed"
+  },
+  "15-unknown-core-no-gap.md": {
+    "exit": 1,
+    "radius": 1,
+    "ceiling": "Radius 2",
+    "must_report": [
+      "Radius 2: core evidence is Unknown"
+    ],
+    "must_warn": [],
+    "case": "contradictory row: Unknown core evidence, no Unknown gap"
+  },
+  "16-na-without-reason.md": {
+    "exit": 0,
+    "radius": 2,
+    "ceiling": "scope",
+    "must_report": [],
+    "must_warn": [
+      "Radius 3 is N/A without a reason"
+    ],
+    "case": "N/A with no justification (compatibility: warn, do not fail)"
+  }
+}
