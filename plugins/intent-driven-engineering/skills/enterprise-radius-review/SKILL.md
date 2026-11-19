@@ -12,6 +12,8 @@ Determine how far a proposed or existing AI capability extends from business int
 
 Do not reward complexity. The preferred design is the **minimum sufficient architecture that safely achieves the intent**.
 
+**Advisory only.** A Radius Review is an architecture judgment, not a certification. It does not replace a security review, architecture approval, validation/quality sign-off, or operational readiness approval. State this in every review.
+
 ## The Five Radii
 
 ### Radius 1 — Intent & Discovery
@@ -153,10 +155,12 @@ Do not make the agent responsible for deterministic enforcement when a system co
 
 ## Trigger
 
-Use when the user asks:
+Run the full review only when the user explicitly asks for a Radius Review/Analysis or asks an architecture-readiness question about a system as a whole. For a narrow ownership or placement question, answer it directly using the radius vocabulary and offer the full review instead of running it.
+
+Full-review triggers:
 - "Do a Radius Analysis."
 - "Where does this belong?"
-- "Who owns this?"
+- "Who owns this capability/platform?"
 - "Is this platform or application?"
 - "Is this ready for production?"
 - "Where should the MCP servers live?"
@@ -174,9 +178,16 @@ Do not perform the full review for:
 
 ## Review Process
 
+0. **Set scope.** Name the unit being rated (one capability, agent, or service). If the subject is a platform containing parts at different maturity, rate each part separately or pick one and say which; never give one radius to a mixed portfolio.
+0a. **Set depth.** Small or single-component subject → use the Short Form. Otherwise use the Full Form.
 1. Restate the intended outcome in one or two sentences.
-2. Determine the highest radius the current solution credibly reaches.
-3. Evaluate every radius up to that point.
+2. Evaluate each radius and label every material claim with an evidence level:
+   - **Verified** — the reviewer ran or observed it (tests, evals, live telemetry, deployed config).
+   - **Documented** — stated in repo docs, configs, or diagrams, not independently checked.
+   - **Reported** — asserted by a person or ticket, no artifact.
+   - **Unknown** — no evidence found.
+   Cite the source (file path, link, command) for each.
+3. Determine the current credible radius using the **ceiling rule**: a radius is reached only if it and every lower radius have no material gap at **Unknown**, and its core claims are at least **Documented**. The overall radius cannot exceed the lowest radius with a material gap. If the score rests mainly on Documented evidence, say so in the Executive Finding.
 4. Identify claimed radii that lack evidence.
 5. Separate application responsibilities from shared platform responsibilities.
 6. Identify authority and autonomy boundaries.
@@ -190,11 +201,18 @@ Do not perform the full review for:
 ```markdown
 # Radius Review: <subject>
 
+> Advisory review — not a security review, architecture approval, or production readiness sign-off.
+
+## Scope & Method
+- Unit rated: <capability/agent/service>
+- Ran: <tests, evals, commands actually executed — or "nothing executed">
+- Read: <docs, configs, code inspected>
+
 ## Executive Finding
-<Current radius, biggest strength, biggest gap, and recommended next move.>
+<Current radius, biggest strength, biggest gap, and recommended next move. Label the overall radius as a judgment.>
 
 ## Current Credible Radius
-<1-5 with explanation>
+<1-5, which radius set the ceiling, and the dominant evidence level behind the score>
 
 ## Radius 1 — Intent & Discovery
 ### Present
@@ -242,13 +260,19 @@ Do not perform the full review for:
 
 For radii beyond the intended scope, state **Not required for current intent** rather than treating absence as a defect.
 
+### Short Form
+
+For small systems or single components, use only: Advisory line, Scope & Method, Executive Finding, a five-row table (Radius | Present | Evidence level + source | Gap), Authority & Autonomy, Proof Required Before Expansion. Mark out-of-scope radii **N/A**.
+
 ## Quality Rules
 
 - Never equate more infrastructure with better architecture.
 - Do not move a concern into a central platform merely because it could be centralized.
 - Centralize capabilities that provide repeatable governance, interoperability, safety, or economic benefit.
 - Keep domain decisions close to domain teams.
-- Distinguish design claims from demonstrated evidence.
+- Distinguish design claims from demonstrated evidence; every material claim carries an evidence label and source.
+- Apply the ceiling rule: never score an outer radius while an inner radius has an Unknown material gap.
+- Never give a single radius to a portfolio of capabilities at different maturity.
 - Separate prototype success from production readiness.
 - Make ownership explicit.
 - Identify the exact control or evidence required before recommending broader autonomy.
@@ -257,7 +281,9 @@ For radii beyond the intended scope, state **Not required for current intent** r
 ## Validation
 
 Before finalizing, ask:
-- Did the review identify the current credible radius?
+- Did the review state its scope and what it actually ran versus only read?
+- Did the review identify the current credible radius, and does it respect the ceiling rule?
+- Does it include the advisory statement?
 - Did it distinguish missing capability from intentionally out-of-scope capability?
 - Did it separate application, platform, and enterprise control responsibilities?
 - Are human, agent, and system responsibilities clear?
@@ -270,3 +296,12 @@ Before finalizing, ask:
 Treat corrections as proposed deltas, not automatic changes.
 
 A new Radius rule should be promoted only when it improves the failing case without degrading prior successful reviews or causing systematic over-centralization, over-governance, or architectural inflation.
+
+### Calibration Set
+
+Keep at least three reference cases with expected outcomes, and re-run them before promoting any rule change:
+1. **Small prototype** — expected: Radius 1–2, Short Form, outer radii N/A, no recommendation to build platform infrastructure.
+2. **Production service with real telemetry and evals** — expected: Radius 4, mostly Verified evidence, specific Radius 5 gaps.
+3. **Well-documented system with thin evidence** — expected: score capped by the ceiling rule, finding states the score rests on Documented evidence.
+
+Add each real correction as a new case.
