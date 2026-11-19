@@ -1,6 +1,6 @@
 # Intent-Driven Engineering Plugin
 
-Version 1.0.0
+Version 1.4.0
 
 This Claude Code plugin packages three reusable skills:
 
@@ -51,7 +51,7 @@ Produces:
 Use for:
 - "Do a Radius Analysis."
 - "Where does this belong?"
-- "Who owns this?"
+- "Who owns this capability/platform?"
 - "Is this ready for production?"
 - "What is missing from this architecture?"
 
@@ -61,6 +61,18 @@ Reviews:
 3. Engineering & Integration
 4. Delivery & Production
 5. Enterprise Operation & Governance
+
+Advisory only: it does not replace a security review, architecture approval, or production readiness sign-off. A narrow ownership or placement question gets a brief answer and an offer of the full review.
+
+Validate a saved review with the bundled checker (Python 3.8+, standard library only; reads the file, runs nothing from the reviewed repository, makes no network calls):
+
+```bash
+cd skills/enterprise-radius-review
+python3 scripts/check_review.py review.md       # 0 = PASS, 1 = FAIL, 2 = usage/file error
+python3 -m unittest discover -s scripts         # checker tests and validator fixtures
+```
+
+It checks structure, labels, and scope rules and recomputes the radius with the ceiling rule. It does not judge whether evidence labels are correct or gaps material. See `calibration/` for the calibration procedure.
 
 ### proof-case-study-builder
 
@@ -79,20 +91,16 @@ and never invents proof.
 
 ## Local Development
 
-From the directory containing this plugin:
+From the root of the marketplace repository:
 
 ```bash
-claude --plugin-dir ./intent-driven-engineering
+claude --plugin-dir ./plugins/intent-driven-engineering
 ```
-
-If this plugin is inside a marketplace repo at `plugins/intent-driven-engineering`, point `--plugin-dir` to that folder.
 
 ## Marketplace Installation
 
-For a repository containing `.claude-plugin/marketplace.json`:
-
 ```text
-/plugin marketplace add <github-owner>/<repo>
+/plugin marketplace add kendallmark3/intent-driven-engineering-plugin
 ```
 
 Then install:
@@ -135,8 +143,11 @@ plugins/intent-driven-engineering/
 │   ├── intent-refiner/
 │   │   └── SKILL.md
 │   ├── enterprise-radius-review/
-│   │   └── SKILL.md
+│   │   ├── SKILL.md
+│   │   ├── scripts/        # check_review.py + tests
+│   │   └── calibration/    # cases, run log, validator fixtures
 │   └── proof-case-study-builder/
 │       └── SKILL.md
+├── CHANGELOG.md
 └── README.md
 ```

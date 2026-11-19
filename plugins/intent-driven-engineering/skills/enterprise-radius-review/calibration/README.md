@@ -8,6 +8,8 @@ These cases check that the skill scores systems consistently and does not inflat
 - `case-02-production-service.md` — placeholder: needs a real production service.
 - `case-03-documented-thin-evidence.md` — placeholder: needs a well-documented system with thin evidence.
 - `run-log.md` — one row per review run. This is the evidence record.
+- `readiness-1.4.0.md` — engineering readiness report for the 1.4.0 hardening.
+- `fixtures/` — synthetic reviews with pre-registered expected results that test the deterministic checker (not the AI review). See `fixtures/README.md`.
 - `../scripts/check_review.py` — deterministic checker and scorer (standard library only). Tests: `python3 -m unittest discover -s scripts`.
 
 ## Procedure
@@ -29,6 +31,10 @@ These cases check that the skill scores systems consistently and does not inflat
 - Advisory statement and Scope & Method (ran vs. read) are present.
 - No radius above the ceiling is scored as reached.
 - No out-of-scope radius is treated as a defect.
+
+## Two kinds of repeatability
+- **Checker:** same review file in, same output out. Demonstrated by the fixture tests (each fixture run 20 times, outputs compared).
+- **Review:** same system in, same radius and ceiling out across fresh sessions. This depends on model judgment and is only shown by real runs recorded in `run-log.md`.
 
 ## Consistency criterion for a case
 All runs of the same case, on the same evidence, give the same radius and the same ceiling. If they differ, record the judgment call that caused the difference — it is a candidate for a rule clarification.

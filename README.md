@@ -13,7 +13,7 @@ Claude Code plugin marketplace for **Intent-Driven Engineering (IDE)**.
 
 | Plugin | Version | Skills |
 |---|---|---|
-| [`intent-driven-engineering`](plugins/intent-driven-engineering) | 1.0.0 | `intent-refiner`, `enterprise-radius-review`, `proof-case-study-builder` |
+| [`intent-driven-engineering`](plugins/intent-driven-engineering) | 1.4.0 | `intent-refiner`, `enterprise-radius-review`, `proof-case-study-builder` |
 
 ```text
 ROUGH IDEA → intent-refiner → CLEAR INTENT → BUILD
@@ -28,7 +28,7 @@ flowchart TB
     subgraph REPO["GitHub · kendallmark3/intent-driven-engineering-plugin"]
         direction TB
         MKT[".claude-plugin/marketplace.json<br/><i>intent-driven-engineering-marketplace</i>"]
-        subgraph PLUGIN["plugins/intent-driven-engineering · v1.0.0"]
+        subgraph PLUGIN["plugins/intent-driven-engineering · v1.4.0"]
             direction TB
             PJ[".claude-plugin/plugin.json"]
             S1["skills/intent-refiner"]
