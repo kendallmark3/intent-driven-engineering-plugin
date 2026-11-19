@@ -1,7 +1,7 @@
 ---
 name: enterprise-radius-review
 description: Advisory, evidence-labelled review of an AI system, architecture, repository, gateway, agentic workflow, platform capability, shared service, or production proposal using a five-radius enterprise model. Use when the user requests a Radius Review/Analysis, asks whether a system is production-ready, where a capability or platform belongs, how far a team's responsibility extends, or what enterprise controls are missing. For a narrow ownership or placement question, answer briefly and offer the full review.
-version: 1.3.1
+version: 1.4.0
 ---
 
 # Enterprise Radius Review
@@ -176,6 +176,14 @@ Do not perform the full review for:
 - a trivial local script with no enterprise implications;
 - an architecture discussion where the user explicitly wants only one isolated component answered.
 
+## Execution Safety
+
+By default a Radius Review reads; it does not execute. It must not require unrestricted code execution, automatic dependency installation, sending proprietary repository content to an external service, modifying the reviewed repository, elevated permissions, or cloud infrastructure.
+
+- Running a reviewed repository's tests, builds, scripts, or evals executes code that repository controls. On an unfamiliar or untrusted repository, ask before running anything, and prefer a scratch copy so tracked files are not changed.
+- If nothing was run, say so in Scope & Method (`Ran: nothing executed`) and do not label anything **Verified** that you only read.
+- `scripts/check_review.py` uses only the Python standard library, reads the review file it is given, runs nothing from the reviewed repository, and makes no network calls. It writes only when `--log` is passed.
+
 ## Review Process
 
 0. **Set scope.** Name the unit being rated (one capability, agent, or service). If the subject is a platform containing parts at different maturity, rate each part separately or pick one and say which; never give one radius to a mixed portfolio.
@@ -186,13 +194,14 @@ Do not perform the full review for:
    - **Documented** — stated in repo docs, configs, or diagrams, not independently checked.
    - **Reported** — asserted by a person or ticket, no artifact.
    - **Unknown** — no evidence found.
-   Cite the source (file path, link, command) for each.
+   Cite the source for each when one exists: a file path, commit, config file, test or eval run, deployment artifact, telemetry query, architecture decision, or the person who provided it. A reference shows where a claim comes from; it does not prove the claim. Never promote **Documented** to **Verified** without having run or directly observed it.
 3. Determine the current credible radius using the **ceiling rule**:
    - A radius is **reached** only if its core claims are at least **Documented** and it has no material gap at **Unknown**.
    - The current credible radius is the highest radius N such that radii 1 through N are all reached. The first radius that is not reached sets the ceiling; name it.
    - A radius with partial evidence but an Unknown material gap is not reached. Report this as "Radius N, approaching N+1" — never round up.
    - If no radius is reached, the current credible radius is 0 (intent not yet established).
    - If the score rests mainly on Documented evidence, say so in the Executive Finding.
+3a. **Explain the gap that sets the ceiling** (and any other material gap): what capability or evidence is missing, why it matters to the intended outcome, which radius it affects, what evidence would resolve it, and whether it is genuinely needed for the intended scope. A concern the intent does not need is out of scope, not a gap.
 4. Identify claimed radii that lack evidence.
 5. Separate application responsibilities from shared platform responsibilities.
 6. Identify authority and autonomy boundaries.
@@ -224,7 +233,7 @@ Ceiling: <Radius M | scope | none>
 ## Radius Summary
 | Radius | Status | Core evidence | Unknown material gap |
 |---|---|---|---|
-| 1 | <Reached / Not reached / N/A> | <Verified / Documented / Reported / Unknown> | <Yes / No> |
+| 1 | <Reached / Not reached / N/A — reason> | <Verified / Documented / Reported / Unknown> | <Yes / No> |
 | 2 | ... | ... | ... |
 | 3 | ... | ... | ... |
 | 4 | ... | ... | ... |
@@ -280,7 +289,12 @@ For radii beyond the intended scope, state **Not required for current intent** r
 
 For small systems or single components, use only: Advisory line, Scope & Method, Executive Finding, a five-row table (Radius | Present | Evidence level + source | Gap), Authority & Autonomy, Proof Required Before Expansion. Mark out-of-scope radii **N/A**. Always include Current Credible Radius and Radius Summary, in both forms.
 
-In the Radius Summary: **Reached** needs core evidence Verified or Documented and no Unknown material gap; otherwise **Not reached**. Use **N/A** (with "—" in the other cells) only for radii beyond the intended scope. `Ceiling` is the first radius that is not Reached, `scope` if that radius is N/A, or `none` if all five are Reached.
+In the Radius Summary: **Reached** needs core evidence Verified or Documented and no Unknown material gap; otherwise **Not reached**. Unknown core evidence is itself an Unknown material gap. Keep exactly one row per radius. `Ceiling` is the first radius that is not Reached, `scope` if that radius is N/A, or `none` if all five are Reached.
+
+Scope exclusions (**N/A**):
+- Use N/A only for radii genuinely outside the intended scope, written `N/A — <reason>` with "—" in the other cells.
+- An applicable capability that is absent or unproven is **Not reached**, never N/A. N/A cannot carry evidence or an Unknown gap.
+- Radius 1 is never N/A. Exclusions are the outermost radii only: once a radius is N/A, every radius above it is N/A.
 
 ## Quality Rules
 
@@ -301,7 +315,7 @@ In the Radius Summary: **Reached** needs core evidence Verified or Documented an
 Before finalizing, ask:
 - Did the review state its scope and what it actually ran versus only read?
 - Did the review identify the current credible radius, and does it respect the ceiling rule?
-- If you can run Python 3, save the review to a file and run `python3 scripts/check_review.py <review-file>` from this skill's directory. Fix every FAIL before finalizing. The script checks the structure and recomputes the radius from the Radius Summary; it does not judge whether the evidence labels are right — that stays with you and the human reviewer. If Python is unavailable, apply the same checks by hand.
+- If you can run Python 3, save the review to a file and run `python3 scripts/check_review.py <review-file>` from this skill's directory. Fix every FAIL before finalizing and resolve or explain every WARN. The script checks the structure, the labels, the scope rules, and recomputes the radius and ceiling from the Radius Summary. It does not judge whether an evidence label is right, whether a gap is material, or whether an exclusion is justified on the merits — that stays with you and the human reviewer. If Python is unavailable, apply the same checks by hand.
 - Would a second run on the same evidence give the same radius and the same ceiling? If the score depends on a judgment call (for example, whether a gap is material), name that call explicitly.
 - Does it include the advisory statement?
 - Did it distinguish missing capability from intentionally out-of-scope capability?
