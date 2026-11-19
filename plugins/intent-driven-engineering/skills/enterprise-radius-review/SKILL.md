@@ -1,7 +1,7 @@
 ---
 name: enterprise-radius-review
 description: Advisory, evidence-labelled review of an AI system, architecture, repository, gateway, agentic workflow, platform capability, shared service, or production proposal using a five-radius enterprise model. Use when the user requests a Radius Review/Analysis, asks whether a system is production-ready, where a capability or platform belongs, how far a team's responsibility extends, or what enterprise controls are missing. For a narrow ownership or placement question, answer briefly and offer the full review.
-version: 1.3.0
+version: 1.3.1
 ---
 
 # Enterprise Radius Review

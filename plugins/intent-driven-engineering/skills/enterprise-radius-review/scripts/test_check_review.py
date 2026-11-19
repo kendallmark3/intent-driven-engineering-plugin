@@ -39,7 +39,7 @@ class CheckTests(unittest.TestCase):
         self.assertEqual((r, c), (1, "Radius 2"))
 
     def test_inflated_score_fails(self):
-        # The abbott-forge pattern: Radius 4 claimed while inner radii have Unknown gaps.
+        # Inflated-score pattern: Radius 4 claimed while inner radii have Unknown gaps.
         rows = [("Not reached", "Documented", "Yes"), ("Not reached", "Unknown", "Yes"),
                 ("Reached", "Documented", "No"), ("Reached", "Documented", "No"), ("Not reached", "Unknown", "Yes")]
         problems, r, c = cr.check(review(rows, 4, "Radius 5"))
